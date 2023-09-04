@@ -1,7 +1,13 @@
 #!/bin/bash
 
+cmd=""
 if [ -z "$PATTERN_UTILITY_CONTAINER" ]; then
 	PATTERN_UTILITY_CONTAINER="quay.io/hybridcloudpatterns/utility-container"
+	if [ $1 = "test" ]; then 
+		shift
+		cmd=/opt/container/entrypoint.sh
+		PATTERN_UTILITY_CONTAINER=validatedpatterns/mcgitops-test
+	fi
 fi
 
 UNSUPPORTED_PODMAN_VERSIONS="1.6 1.5"
@@ -43,4 +49,5 @@ podman run -it --rm \
 	-v "${HOME}":/root \
 	-w "$(pwd)" \
 	"$PATTERN_UTILITY_CONTAINER" \
+	$cmd \
 	$@
